@@ -5,30 +5,45 @@
 {% endblock %}
 
 {% block main %}
-<div>
-    <h1>Expensheet!</h1>
+
+<div id = "title">
+    <h1 id = "label">Expensheet </h1>
+    <h2>An easy way to keep track of your expenses</h2>
+</div>  
+
+<div >
+    <nav>
+        <div id = "navbar-list" >
+            <ul id = "nav-list">
+                <li>
+                    <a id = "brand" href = "/home">Expensheet</a>
+                </li>
+
+                <li>
+                    <a href = "/insert">Insert</a>
+                </li>
+                
+                <li>
+                    <a href = "/plan">Plan</a>
+                </li>
+
+                <li>
+                    <a href = "/analyse">Analyse</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
     <h3>An easy way to manage and keep track of your expenses!</h3>
     <h4>You are logged in as: {{email}}</h4>
 </div>
 
-    <nav>
-
-        <form action = "/insert" method = "GET">
-            <button type = submit>Insert</button>
-        </form>
-
-        <form action = "/plan" method = "GET">
-            <button type = submit>Plan</button>
-        </form>
-
-        <form action = "/analyse" method = "GET">
-            <button type = submit>Analyse</button>
-        </form>
-    </nav>
-
+<div>
     <h3>Your spending plan:</h3>
-
     <h4>Enter an additional month:</h4>
+</div>
+
+<div>
     <form action = "/plan" method = "POST">
         <label for = "month">Month:</label>
         <select id = "month" name = "month">
@@ -46,9 +61,9 @@
 
         <button type = "submit">Add Plan</button>    
     </form>
+</div>
 
-
-
+<div>
     <table>
         <thead>
             <tr>
@@ -76,5 +91,5 @@
             {% endfor %}
         </tbody>
     </table>
-
+</div>
 {% endblock %}

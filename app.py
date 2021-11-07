@@ -159,6 +159,7 @@ def login():
 
         #get relevant information
         email = request.form.get("email")
+        email = email.lower()
         password = request.form.get("password")
 
         #connect to db

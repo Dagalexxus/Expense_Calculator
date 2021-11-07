@@ -1,0 +1,57 @@
+html
+{
+    margin-left: 12%;
+    margin-right: 12%;
+    margin-top: 1%;
+    background-color: rgb(245, 241, 237);
+}
+
+body
+{
+    font-family: Helvetica;
+    background-color: rgb(245, 241, 237);
+}
+
+a
+{
+    color: black; 
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: grey;
+}
+
+#brand
+{
+    font-size: x-large;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+#label
+{
+    font-size: 70px;
+    color:rgb(67, 187, 147);
+    text-shadow: 2px 2px 0 black;
+}
+
+#nav-list li{
+    display: inline;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 5px 5px 5px; 
+    margin: auto 1% auto 1%; 
+}
+
+#navbar-list
+{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#title
+{
+    text-align: center;
+}
