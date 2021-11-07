@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Expensheet!</h1>
-    <h3>An easy way to manage and keep track of your expenses!</h3>
-    <h4>You are logged in as: {{email}}</h4>
 
     <div>
+        <h1>Expensheet!</h1>
+        <h3>An easy way to manage and keep track of your expenses!</h3>
+        <h4>You are logged in as: {{email}}</h4>
+    </div>
+
+    <nav>
 
         <form action = "/insert" method = "GET">
             <button type = submit>Insert</button>
@@ -22,7 +25,7 @@
         <form action = "/analyse" method = "GET">
             <button type = submit>Analyse</button>
         </form>
-    </div>
+    </nav>
     
     <form action = "/insert" method = "post">
         <label for = "day">Day:</label>
