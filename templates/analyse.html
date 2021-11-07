@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Analysis
+{% endblock %}
+
+{% block main %}
+    <h1>Expensheet!</h1>
+    <h3>An easy way to manage and keep track of your expenses!</h3>
+    <h4>You are logged in as: {{email}}</h4>
+
+    <div>
+
+        <form action = "/insert" method = "GET">
+            <button type = submit>Insert</button>
+        </form>
+
+        <form action = "/plan" method = "GET">
+            <button type = submit>Plan</button>
+        </form>
+
+        <form action = "/analyse" method = "GET">
+            <button type = submit>Analyse</button>
+        </form>
+    </div>
+
+    <!-- To DO -->
+
+    <form action='/analyse' method = "POST">
+        <h5>Categories to group by:</h5>
+        <label for = "filter1">Category 1</label>
+        <select name = "filter1">
+            <option value = "card">Card</option>
+            <option value = "type">Type</option>
+            <option value = "month">Month</option>
+            <option value = "year">Year</option>
+        </select>
+
+        <label for = "filter2">Category 2</label>
+        <select name = "filter2">
+            <option value = "card">Card</option>
+            <option value = "type">Type</option>
+            <option value = "month">Month</option>
+            <option value = "year">Year</option>
+        </select>
+
+        <label for = "filter3">Category 3</label>
+        <select name = "filter3">
+            <option value = "card">Card</option>
+            <option value = "type">Type</option>
+            <option value = "month">Month</option>
+            <option value = "year">Year</option>
+        </select>
+
+        <button type = "submit">Group</button>
+    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Date:</th>
+                <th>Type:</th>
+                <th>Amount:</th>
+                <th>Card:</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for x in range(payments_all | length) %}
+            <tr>
+                <th>{{ payments_all[x][2] }} - {{ payments_all[x][3] }} - {{ payments_all[x][4] }}</th>
+                <th>{{ payments_all[x][5] }}</th>
+                <th>{{ payments_all[x][6] }}</th>
+                <th>{{ payments_all[x][1] }}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

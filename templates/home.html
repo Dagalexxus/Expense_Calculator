@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <h1>Expensheet!</h1>
+    <h3>An easy way to manage and keep track of your expenses!</h3>
+    <h4>You are logged in as: {{email}}</h4>
+
+    <div>
+
+        <form action = "/insert" method = "GET">
+            <button type = submit>Insert</button>
+        </form>
+
+        <form action = "/plan" method = "GET">
+            <button type = submit>Plan</button>
+        </form>
+
+        <form action = "/analyse" method = "GET">
+            <button type = submit>Analyse</button>
+        </form>
+    </div>
+
+    <form action = "/insert" method = "post">
+        <label for = "day">Day:</label>
+        <select id = "day" name = "day">
+            {% for i in range(1, 32) %}
+                <option value = {{ i }}>{{ i }}</option>
+            {% endfor %}    
+        </select>
+
+        <label for = "month">Month:</label>
+        <select id = "month" name = "month">
+            {% for i in range (1, 13) %}
+                <option value = {{ i }}>{{ i }}</option>
+            {% endfor %}
+        </select>
+
+        <label for = "year">Year:</label>
+        <input type = "text" id = "year" name="year" placeholder = "Year">
+
+        <label for = "type">Type of expense:</label>
+        <input type = "text" name="type" id = "type" placeholder = "e.g. Groceries">
+
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" step="any" min="0.01" id="amount" placeholder="0.00">
+
+        <label for = "card">Which card was used? (Optional for better visualisation - please enter only the provider)</label>
+        <input type = "text" name="card" id = "card" placeholder = "e.g. Monzo">
+
+        <button type = "submit">Add Expense</button>
+    </form>
+
+    <form action = "/logout">
+        <button type = submit>Logout</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date:</th>
+                <th>Type:</th>
+                <th>Amount:</th>
+                <th>Card:</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for x in range(all_queries | length) %}
+            <tr>
+                <th>{{ all_queries[x][2] }} - {{ all_queries[x][3] }} - {{ all_queries[x][4] }}</th>
+                <th>{{ all_queries[x][5] }}</th>
+                <th>{{ all_queries[x][6] }}</th>
+                <th>{{ all_queries[x][1] }}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

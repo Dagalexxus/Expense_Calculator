@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <h1>Expensheet!</h1>
+    <h3>An easy way to manage and keep track of your expenses!</h3>
+
+
+    <h4> Please register with your email adress in order to use Expensheet.</h4>
+    <form action="/register", method = "post">
+        <div>
+            <input autocomplete="off", autofocus, name="email", placeholder="You@domain.com" type="email">
+        </div>
+
+        <div>
+            <input autocomplete="off", name="password", placeholder="your password", type="password">
+        </div>
+
+        <div>
+            <input autocomplete="off", name="password_repeat", placeholder="Please repeat your password.", type="password">
+        </div>
+
+        <div>
+            <button type = "submit">Register</button>
+        </div>
+    </form>
+{% endblock %}

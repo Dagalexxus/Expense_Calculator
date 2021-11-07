@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <h1>Expensheet!</h1>
+    <h3>An easy way to manage and keep track of your expenses!</h3>
+
+    <h4> Already an user?</h4>
+    <a href="{{ url_for('login') }}">Login here.</a>
+
+    <h4> New user?</h4>
+    <a href="{{ url_for('register') }}">Register here.</a>
+
+{% endblock %}
