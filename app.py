@@ -76,11 +76,11 @@ def analysis():
         if (filter1 == filter2) and (filter1 == filter3):
             db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ? ORDER BY id DESC", (session["user_id"], filter1,))
         elif (filter1 == filter2) and (filter1 != filter3):
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter3,))
+            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter3,))
         elif (filter1 == filter3) and (filter1 != filter2):
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2,))
+            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2,))
         else:
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id GROUP BY ?, ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2, filter3,))
+            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2, filter3,))
         payments_all = db_cursor.fetchall()
 
         return render_template('analyse.html', payments_all = payments_all)

@@ -32,23 +32,9 @@ a:hover
 #label
 {
     font-size: 70px;
+    font-family: Lobster;
     color:rgb(67, 187, 147);
     text-shadow: 2px 2px 0 black;
-}
-
-#nav-list li{
-    display: inline;
-    border-width: 1px;
-    border-style: solid;
-    padding: 5px 5px 5px 5px; 
-    margin: auto 1% auto 1%; 
-}
-
-#navbar-list
-{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
 }
 
 #title
