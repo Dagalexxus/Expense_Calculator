@@ -42,23 +42,63 @@
     <h4>Enter an additional month:</h4>
 </div>
 
-<div>
+<div class = "container-fluid">
     <form action = "/plan" method = "POST">
-        <label for = "month">Month:</label>
-        <select id = "month" name = "month">
-            <option value = {{ month }} selected>{{ month }}</option>
-            {% for i in range (1, 13) %}
-                <option value = {{ i }}>{{ i }}</option>
-            {% endfor %}
-        </select>
-        <label for = "year">Year:</label>
-        <input id="year" name= "year" type = "number" placeholder = "Year">
-        <label for = "salary">Salary: (if left empty last months will be used)</label>
-        <input type = "number" name = "salary" min = "0.00" step = "0.01" id = "salary">
-        <label for = "saving">Saving planned: (if left empty last months will be used)</label>
-        <input type = "number" name = "saving" min = "0.00" step = "0.01" id = "saving">
+        <div class = "row g-2 align-items-center">
+            <div class = "col-1">
+                <label for = "month">Month:</label>
+            </div>
 
-        <button type = "submit">Add Plan</button>    
+            <div class = "col-5">
+                <select id = "month" name = "month">
+                    <option value = {{ month }} selected>{{ month }}</option>
+                    {% for i in range (1, 13) %}
+                        <option value = {{ i }}>{{ i }}</option>
+                    {% endfor %}
+                </select>   
+            </div>
+
+            <div class = "col-1">
+                <label for = "year">Year:</label>
+            </div>
+
+            <div class = "col-5">
+                <input id="year" name= "year" type = "number" placeholder = "Year">
+            </div>
+        </div>
+
+        <div class = "row g-2 align-items-center">
+            <div class = "col-1">
+                <label for = "salary">Salary:</label>
+            </div>
+
+            <div class = "col-2">
+                <input type = "number" name = "salary" min = "0.00" step = "0.01" id = "salary">
+            </div>
+
+            <div class = "col-3">
+                <span class = "form-text">
+                    If left blank the last months amount will be used.
+                </span>
+            </div>
+
+            <div class = "col-1">
+                <label for = "saving">Saving:</label>
+            </div>
+
+            <div class = "col-2">
+                <input type = "number" name = "saving" min = "0.00" step = "0.01" id = "saving">
+            </div>
+
+            <div class = "col-3">
+                <span class = "form-text">
+                    If left blank the last months amount will be used.
+                </span>
+            </div>
+        
+        <div class = "row">
+            <button type = "submit">Add Plan</button>    
+        </div>
     </form>
 </div>
 
