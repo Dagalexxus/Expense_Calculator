@@ -5,81 +5,67 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-        <h1>Expensheet!</h1>
-        <h3>An easy way to manage and keep track of your expenses!</h3>
-        <h4>You are logged in as: {{email}}</h4>
+<div id = "title">
+    <h1 id = "label">Expensheet </h1>
+    <h2>An easy way to keep track of your expenses</h2>
+</div>  
+
+<nav class = "navbar navbar-expand-lg navbar-light bg-light ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home">Expensheet</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>    
+    <div class = "collapse navbar-collapse" id = "navbarNav" >
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id = "nav-list">
+            <li class="nav-item">
+                <a class="nav-link" href = "/insert">Insert</a>
+            </li>
+                
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href = "/plan">Plan</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href = "/analyse">Analyse</a>
+            </li>
+        </ul>
     </div>
+</nav>
+    
+<p style = "text-align: end">You are logged in as: {{email}}</p>
 
-    <nav>
+<h3 style = "text-align: center">Your spending:</h3>
 
-        <form action = "/insert" method = "GET">
-            <button type = submit>Insert</button>
-        </form>
-
-        <form action = "/plan" method = "GET">
-            <button type = submit>Plan</button>
-        </form>
-
-        <form action = "/analyse" method = "GET">
-            <button type = submit>Analyse</button>
-        </form>
-    </nav>
-
-    <form action = "/insert" method = "post">
-        <label for = "day">Day:</label>
-        <select id = "day" name = "day">
-            {% for i in range(1, 32) %}
-                <option value = {{ i }}>{{ i }}</option>
-            {% endfor %}    
-        </select>
-
-        <label for = "month">Month:</label>
-        <select id = "month" name = "month">
-            {% for i in range (1, 13) %}
-                <option value = {{ i }}>{{ i }}</option>
-            {% endfor %}
-        </select>
-
-        <label for = "year">Year:</label>
-        <input type = "text" id = "year" name="year" placeholder = "Year">
-
-        <label for = "type">Type of expense:</label>
-        <input type = "text" name="type" id = "type" placeholder = "e.g. Groceries">
-
-        <label for="amount">Amount:</label>
-        <input type="number" name="amount" step="any" min="0.01" id="amount" placeholder="0.00">
-
-        <label for = "card">Which card was used? (Optional for better visualisation - please enter only the provider)</label>
-        <input type = "text" name="card" id = "card" placeholder = "e.g. Monzo">
-
-        <button type = "submit">Add Expense</button>
-    </form>
-
-    <form action = "/logout">
-        <button type = submit>Logout</button>
-    </form>
-
-    <table>
+<div class = "container-fluid">
+    <table class = "table table-striped table-hover">
         <thead>
             <tr>
-                <th>Date:</th>
-                <th>Type:</th>
-                <th>Amount:</th>
-                <th>Card:</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Total expenses</th>
+                <th>Total budget</th>
+                <th>Saving planned</th>
+                <th>To spend</th>
+                <th>Actually saved</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for x in range(all_queries | length) %}
+            {% for x in range(all_queries_plan | length) %}
             <tr>
-                <th>{{ all_queries[x][2] }} - {{ all_queries[x][3] }} - {{ all_queries[x][4] }}</th>
-                <th>{{ all_queries[x][5] }}</th>
-                <th>{{ all_queries[x][6] }}</th>
-                <th>{{ all_queries[x][1] }}</th>
+                <th>{{ all_queries_plan[x][1] }}</th>
+                <th>{{ all_queries_plan[x][2] }}</th>
+                <th>{{ payments[x][0] }}</th>
+                <th>{{ all_queries_plan[x][3] }}</th>
+                <th>{{ all_queries_plan[x][4] }}</th>
+                <th>{{ all_queries_plan[x][3] - payments[x][0] - all_queries_plan[x][4] }}</th>
+                <th>{{ all_queries_plan[x][3] - payments[x][0] }}</th>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 
 {% endblock %}

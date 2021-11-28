@@ -33,7 +33,7 @@ def analysis():
         db_cursor.execute("SELECT * FROM payments WHERE user_id = ?", (session["user_id"],))
         payments_all = db_cursor.fetchall()
 
-        return render_template('analyse.html', payments_all = payments_all)
+        return render_template('analyse.html', email = session["user_email"], payments_all = payments_all)
 
     else:
 
@@ -86,6 +86,33 @@ def analysis():
         return render_template('analyse.html', payments_all = payments_all)
 
 
+@app.route('/home')
+def home():
+    try:
+        if not session["user_id"]:
+            return render_template('login.html')
+    except:
+        return render_template('login.html')
+
+    #collect all the data for the plan
+    db = sqlite3.connect('expenses.db')
+    db_cursor = db.cursor()
+    
+    try:
+        db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+        all_queries_plan = db_cursor.fetchall()
+    except:
+        return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
+
+    #collect all the data from payments made
+    try:
+        db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+        payments = db_cursor.fetchall()
+    except:
+        return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
+
+    return render_template('home.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
+
 @app.route('/insert', methods=["GET", "POST"])
 def insert():
     try:
@@ -95,8 +122,19 @@ def insert():
         return render_template('login.html')
 
     if request.method == "GET":
-        return render_template('insert.html')
-    
+
+        db = sqlite3.connect('expenses.db')
+        db_cursor = db.cursor()
+
+        #display the previous queries in table form to show the users current picture
+        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY id DESC", (session["user_id"],))
+
+        all_queries = db_cursor.fetchall()
+
+        db.close()
+
+        return render_template("insert.html", email = session["user_email"], all_queries = all_queries)
+        
     else:
         if not session['user_id']:
             flash('Please log in first')
@@ -145,7 +183,7 @@ def insert():
 
         db.close()
 
-        return render_template("insert.html", email = session["user_email"], day = day, month = month, year = year, all_queries = all_queries)
+        return render_template("insert.html", email = session["user_email"], all_queries = all_queries)
 
         
 @app.route("/login", methods=["GET", "POST"])
@@ -197,15 +235,21 @@ def login():
         session["user_email"] = email
         session["user_id"] = id[0][0]
 
-        #display the previous queries in table form to show the users current picture
-        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY id DESC", (session["user_id"],))
+        #collect all the data for the plan
+        try:
+            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+            all_queries_plan = db_cursor.fetchall()
+        except:
+            return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
 
-        all_queries = db_cursor.fetchall()
+        #collect all the data from payments made
+        try:
+            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+            payments = db_cursor.fetchall()
+        except:
+            return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
 
-        db.close()
-
-        flash("Success!")
-        return render_template("home.html", email = session["user_email"], all_queries = all_queries)
+        return render_template('home.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
 
 
 @app.route("/logout")
