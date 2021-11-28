@@ -5,10 +5,12 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-        <h1>Expensheet!</h1>
-        <h3>An easy way to manage and keep track of your expenses!</h3>
-    </div>    
+<div class = "stickytop">
+    <div id = "title">
+        <h1 id = "label">Expensheet </h1>
+        <h2>An easy way to keep track of your expenses</h2>
+    </div>  
+</div> 
 
     <h4> Please log in in order to see your data.</h4>
     <form action="/login", method = "post">
