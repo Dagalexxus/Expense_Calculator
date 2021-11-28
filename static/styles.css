@@ -14,13 +14,13 @@ body
 
 a
 {
-    color: black; 
+    color:rgb(54, 155, 121);
     text-decoration: none;
 }
 
 a:hover
 {
-    color: grey;
+    color:rgb(54, 155, 121)
 }
 
 #brand
@@ -40,4 +40,30 @@ a:hover
 #title
 {
     text-align: center;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+  }
+
+.navbar-light .navbar-nav .nav-link {
+    color:rgb(54, 155, 121)
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color:rgb(80, 221, 174);
+}
+
+.navbar-brand {
+    font-family: Lobster;
+    text-shadow: 1px 1px 0 black;
+}
+
+.stickytop {
+    position: -webkit-sticky;
+    position: sticky;
 }

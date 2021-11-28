@@ -5,66 +5,105 @@
 {% endblock %}
 
 {% block main %}
-<div id = "title">
-    <h1 id = "label">Expensheet </h1>
-    <h2>An easy way to keep track of your expenses</h2>
-</div>  
+<div class = "stickytop">
+    <div id = "title">
+        <h1 id = "label">Expensheet </h1>
+        <h2>An easy way to keep track of your expenses</h2>
+    </div>  
 
-<nav class = "navbar navbar-expand-lg navbar-light bg-light ">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/home">Expensheet</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>    
-    <div class = "collapse navbar-collapse" id = "navbarNav" >
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id = "nav-list">
-            <li class="nav-item">
-                <a class="nav-link" href = "/insert">Insert</a>
-            </li>
+    <nav class = "navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" style = "color:rgb(54, 155, 121) "href="/home">Expensheet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>    
+        <div class = "collapse navbar-collapse" id = "navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id = "nav-list">
+                <li class="nav-item">
+                    <a class="nav-link" href = "/insert">Insert</a>
+                </li>
                 
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href = "/plan">Plan</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href = "/plan">Plan</a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link active" href = "/analyse">Analyse</a>
-            </li>
-        </ul>
+                <li class="nav-item">
+                    <a class="nav-link active" href = "/analyse">Analyse</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <p style = "text-align: end">You are logged in as: {{email}}</p>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <form action = "/logout">
+            <button class="btn btn-outline-dark" style="color:rgb(54, 155, 121);" type = "submit">Logout</button>
+        </form>
     </div>
-</nav>
+</div>
+
+<div>
+    <div>
+        <h3 style = "text-align: center">Your spending analysed:</h3>
+
+        <a class="btn" data-bs-toggle="collapse" href="#analysis" role="button" aria-expanded="false" aria-controls="analysis"><h4 style="color:rgb(54, 155, 121)">Enter an additional month:</h4></a>
+    </div>
     
-<p style = "text-align: end">You are logged in as: {{email}}</p>
+    <div class = "collapse show" id = "analysis">    
+        <div class = "card card-body" style="background-color: rgb(245, 241, 237)">
+            <form action='/analyse' method = "POST">
+                <h5>Categories to group by:</h5>
+                <div class = "row g-2 align-items-center">
+                    <div class = "col-1">
+                        <label for = "filter1">Category 1</label>
+                    </div>
 
-    <form action='/analyse' method = "POST">
-        <h5>Categories to group by:</h5>
-        <label for = "filter1">Category 1</label>
-        <select name = "filter1">
-            <option value = "card">Card</option>
-            <option value = "type">Type</option>
-            <option value = "month">Month</option>
-            <option value = "year">Year</option>
-        </select>
+                    <div class = "col-3">                
+                        <select name = "filter1">
+                            <option value = "card">Card</option>
+                            <option value = "type">Type</option>
+                            <option value = "month">Month</option>
+                            <option value = "year">Year</option>
+                        </select>       
+                    </div>
 
-        <label for = "filter2">Category 2</label>
-        <select name = "filter2">
-            <option value = "card">Card</option>
-            <option value = "type">Type</option>
-            <option value = "month">Month</option>
-            <option value = "year">Year</option>
-        </select>
+                    <div class = "col-1">
+                        <label for = "filter2">Category 2</label>
+                    </div>
 
-        <label for = "filter3">Category 3</label>
-        <select name = "filter3">
-            <option value = "card">Card</option>
-            <option value = "type">Type</option>
-            <option value = "month">Month</option>
-            <option value = "year">Year</option>
-        </select>
+                    <div class = "col-3">
+                        <select name = "filter2">
+                            <option value = "card">Card</option>
+                            <option value = "type">Type</option>
+                            <option value = "month">Month</option>
+                            <option value = "year">Year</option>
+                        </select>
+                    </div>
 
-        <button type = "submit">Group</button>
-    </form>
-    
+                    <div class = "col-1">
+                        <label for = "filter3">Category 3</label>
+                    </div>
+
+                    <div class = "col-3">
+                        <select name = "filter3">
+                            <option value = "card">Card</option>
+                            <option value = "type">Type</option>
+                            <option value = "month">Month</option>
+                            <option value = "year">Year</option>
+                        </select>
+                    </div>
+                </div>
+        
+                <div class = "d-grid col-3 mx-auto" style = "padding-top: 10px;">
+                    <button type = "submit" style = "color:rgb(54, 155, 121)" class="btn btn-outline-dark">Group</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <table class = "table table-striped table-hover">
         <thead>
             <tr>
