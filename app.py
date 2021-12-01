@@ -33,7 +33,7 @@ def analysis():
         db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
         payments_all = db_cursor.fetchall()
 
-        return render_template('analyse.html', email = session["user_email"], payments_all = payments_all)
+        return render_template('analyse.html', email = session["user_email"], payments_all = payments_all,)
 
     else:
 
@@ -87,28 +87,28 @@ def analysis():
             db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
             flash('Please enter a valid filter.')
-            return render_template('analyse.html', payments_all = payments_all)
+            return render_template('analyse.html', payments_all = payments_all, email = session["user_email"])
 
         #grab the requested information
         if (filter1 == filter2) and (filter1 == filter3):
             db_cursor.execute("SELECT SUM(amount), " +filter1+" FROM payments WHERE user_id = ? GROUP BY "+filter1+" ORDER BY SUM(amount) DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
             filter1 = filter1.capitalize()
-            return render_template('analyse1.html', payments_all = payments_all, filter1 = filter1)
+            return render_template('analyse1.html', payments_all = payments_all, filter1 = filter1, email = session["user_email"])
 
         elif (filter1 == filter2) and (filter1 != filter3):
             db_cursor.execute("SELECT sum(amount), " +filter1+", " +filter3+" FROM payments WHERE user_id = ? GROUP BY" +filter1+", " +filter3+" ORDER BY SUM(amount) DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
             filter1 = filter1.capitalize()
             filter3 = filter3.capitalize()
-            return render_template('analyse2.html', payments_all = payments_all, filter1 = filter1, filter3 = filter3)
+            return render_template('analyse2.html', payments_all = payments_all, filter1 = filter1, filter3 = filter3, email = session["user_email"])
 
         elif (filter1 == filter3) and (filter1 != filter2):
             db_cursor.execute("SELECT sum(amount), " +filter1+", " +filter2+" FROM payments WHERE user_id = ? GROUP BY" +filter1+", " +filter2+" ORDER BY SUM(amount) DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
             filter1 = filter1.capitalize()
             filter2 = filter2.capitalize()
-            return render_template('analyse3.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2)
+            return render_template('analyse3.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2, email = session["user_email"])
 
         else:
             db_cursor.execute("SELECT SUM(amount), "+filter1+", "+filter2+", "+filter3+" FROM payments WHERE user_id = ? GROUP BY "+filter1+", "+filter2+", "+filter3+" ORDER BY SUM(amount) DESC", (session["user_id"],))
@@ -116,7 +116,7 @@ def analysis():
             filter1 = filter1.capitalize()
             filter2 = filter2.capitalize()
             filter3 = filter3.capitalize()
-            return render_template('analyse4.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2, filter3 = filter3)
+            return render_template('analyse4.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2, filter3 = filter3, email = session["user_email"])
 
 
 @app.route('/home')

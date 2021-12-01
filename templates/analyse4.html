@@ -120,9 +120,9 @@
         <tbody>
             {% for x in range(payments_all | length) %}
             <tr>
-                <th>{{ payments_all[x][1] }}}}</th>
+                <th>{{ payments_all[x][1] }}</th>
                 <th>{{ payments_all[x][2] }}</th>
-                <th>{{ payments_all[x][3] }} }}</th>
+                <th>{{ payments_all[x][3] }}</th>
                 <th>{{  '%0.2f'| format(payments_all[x][0] | float) }}</th>
             </tr>
             {% endfor %}
