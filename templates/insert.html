@@ -87,7 +87,7 @@
                     </div>
 
                     <div class = "col-5">    
-                        <input type = "text" id = "year" placeholder = "Year" value = {{ year }}>
+                        <input type = "text" id = "year" name="year" placeholder = "Year" value = {{ year }}>
                     </div>
 
                     <div class = "col-2">
@@ -95,7 +95,7 @@
                     </div>  
                 
                     <div class = "col-4">
-                        <input type = "text" id = "type" placeholder = "e.g. Groceries">
+                        <input type = "text" name="type" id = "type" placeholder = "e.g. Groceries">
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class = "col-5">
-                        <input type = "text" id = "amount" placeholder = 0.00>
+                        <input type = "text" name="amount" id = "amount" placeholder = 0.00>
                     </div>  
 
                     <div class = "col-2">
@@ -113,7 +113,7 @@
                     </div>
 
                     <div class = "col-4">
-                        <input type = "text" id = "card" placeholder = "e.g. Monzo">
+                        <input type = "text" name="card" id = "card" placeholder = "e.g. Monzo">
                     </div>
                 </div>
 
@@ -140,7 +140,7 @@
             <tr>
                 <th>{{ all_queries[x][2] }} - {{ all_queries[x][3] }} - {{ all_queries[x][4] }}</th>
                 <th>{{ all_queries[x][5] }}</th>
-                <th>{{ all_queries[x][6] }}</th>
+                <th>{{  '%0.2f'| format(all_queries[x][6] | float) }}</th>
                 <th>{{ all_queries[x][1] }}</th>
             </tr>
             {% endfor %}

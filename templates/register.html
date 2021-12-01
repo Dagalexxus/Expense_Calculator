@@ -12,22 +12,38 @@
     </div>  
 </div>   
 
-    <h4> Please register with your email adress in order to use Expensheet.</h4>
-    <form action="/register", method = "post">
-        <div>
-            <input autocomplete="off", autofocus, name="email", placeholder="You@domain.com" type="email">
-        </div>
+    <h4 style = "text-align: center"> Please register with your email adress in order to use Expensheet.</h4>
+    <div>
+        <form action="/register", method = "post">
+            <div class = "row g-2 align-items-center" style = "padding-top: 20px; padding-bottom: 20px;">
+                <div class = "col-2" style = "text-align: end;">
+                    <label for = "email">Email:</label>
+                </div>
 
-        <div>
-            <input autocomplete="off", name="password", placeholder="your password", type="password">
-        </div>
+                <div class = "col-1">
+                    <input autocomplete="off", autofocus, name="email", placeholder="You@domain.com" type="email", id="email">
+                </div>
 
-        <div>
-            <input autocomplete="off", name="password_repeat", placeholder="Please repeat your password.", type="password">
-        </div>
+                <div class = "col-2" style = "text-align: end;">
+                    <label for = "passowrd">Password:</label>
+                </div>
 
-        <div>
-            <button type = "submit">Register</button>
-        </div>
-    </form>
+                <div class = "col-1">
+                    <input autocomplete="off", name="password", placeholder="Your password", type="password", id="password">
+                </div>
+
+                <div class = "col-2" style = "text-align: end;">
+                    <label for = "passowrd_repeat">Repeat Password:</label>
+                </div>
+
+                <div class = "col-2">
+                    <input autocomplete="off", name="password_repeat", placeholder="Please repeat", type="password", id="passowrd_repeat">
+                </div>  
+            </div>
+
+            <div class = "d-grid col-3 mx-auto">
+                <button type = "submit" style = "color:rgb(54, 155, 121)" class="btn btn-outline-dark">Register</button>
+            </div>  
+        </form>
+    </div>
 {% endblock %}

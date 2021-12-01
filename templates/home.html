@@ -65,11 +65,11 @@
             <tr>
                 <th>{{ all_queries_plan[x][1] }}</th>
                 <th>{{ all_queries_plan[x][2] }}</th>
-                <th>{{ payments[x][0] }}</th>
-                <th>{{ all_queries_plan[x][3] }}</th>
-                <th>{{ all_queries_plan[x][4] }}</th>
-                <th>{{ all_queries_plan[x][3] - payments[x][0] - all_queries_plan[x][4] }}</th>
-                <th>{{ all_queries_plan[x][3] - payments[x][0] }}</th>
+                <th>{{ '%0.2f'| format(payments[x][0] | float) }}</th>
+                <th>{{ '%0.2f'| format(all_queries_plan[x][3] | float) }}</th>
+                <th>{{ '%0.2f'| format(all_queries_plan[x][4] | float) }}</th>
+                <th>{{ '%0.2f'| format(all_queries_plan[x][3] - payments[x][0] - all_queries_plan[x][4] | float) }}</th>
+                <th>{{ '%0.2f'| format(all_queries_plan[x][3] - payments[x][0] | float) }}</th>
             </tr>
             {% endfor %}
         </tbody>

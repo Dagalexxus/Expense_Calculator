@@ -30,7 +30,7 @@ def analysis():
 
         db = sqlite3.connect('expenses.db')
         db_cursor = db.cursor()
-        db_cursor.execute("SELECT * FROM payments WHERE user_id = ?", (session["user_id"],))
+        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
         payments_all = db_cursor.fetchall()
 
         return render_template('analyse.html', email = session["user_email"], payments_all = payments_all)
@@ -38,52 +38,85 @@ def analysis():
     else:
 
         filter1 = request.form.get("filter1")
+        filter1 = filter1.lower()
         filter2 = request.form.get("filter2")
+        filter2 = filter2.lower()
         filter3 = request.form.get("filter3")
+        filter3 = filter3.lower()
         
         db = sqlite3.connect('expenses.db')
         db_cursor = db.cursor()
 
         #ensure no empty variables even if not every filter used
-        if (filter1 == None) and (filter2 == None) and (filter3 == None):
-            db_cursor.execute("SELECT * FROM payments WHERE user_id = ?", (session["user_id"],))
+        if ((filter1 == "") and (filter2 == "") and (filter3 == "")) or ((filter1 == None) and (filter2 == None) and (filter3 == None)):
+            db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
 
             return render_template('analyse.html', payments_all = payments_all)
         
-        if (filter1 == None) and (filter2 != None):
+        if ((filter1 == None) and (filter2 != None)) or ((filter1=="") and (filter2 !="")):
             filter1 = filter2
 
-        if (filter1 == None) and (filter2 == None) and (filter3 != None):
+        if ((filter1 == None) and (filter2 == None) and (filter3 != None)) or ((filter1 == "") and (filter2 == "") and (filter3 != "")):
             filter1 = filter3
             filter2 = filter3
 
-        if(filter1 != None) and (filter2 == None):
+        if ((filter1 != None) and (filter2 == None)) or ((filter1 != "") and (filter2 == "")):
             filter2 = filter1
         
-        if (filter1 != None) and (filter3 == None):
+        if ((filter1 != None) and (filter3 == None)) or ((filter1 != "") and (filter3 == "")):
             filter3 = filter1
+
+        if ((filter1 != "") and (filter2 == "") and (filter3 == "")) or ((filter1 != None) and (filter2 == None) and (filter3 == None)):
+            filter2 = filter1
+            filter3 = filter1
+        
+        if ((filter1 == "") and (filter2 != "") and (filter3 == "")) or ((filter1 == None) and (filter2 != None) and (filter3 == None)):
+            filter1 = filter2
+            filter3 = filter2
+
+        if ((filter1 == "") and (filter2 == "") and (filter3 != "")) or ((filter1 == None) and (filter2 == None) and (filter3 != None)):
+            filter1 = filter3
+            filter2 = filter3
+        
+
 
         #ensure only valid filters are used
         requirements = ["card", "type", "month", "year"]
         if filter1 not in requirements or filter2 not in requirements or filter3 not in requirements:
-            db_cursor.execute("SELECT * FROM payments WHERE user_id = ?", (session["user_id"],))
+            db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
             payments_all = db_cursor.fetchall()
             flash('Please enter a valid filter.')
             return render_template('analyse.html', payments_all = payments_all)
 
         #grab the requested information
         if (filter1 == filter2) and (filter1 == filter3):
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ? ORDER BY id DESC", (session["user_id"], filter1,))
-        elif (filter1 == filter2) and (filter1 != filter3):
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter3,))
-        elif (filter1 == filter3) and (filter1 != filter2):
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2,))
-        else:
-            db_cursor.execute("SELECT id, card, day, month, year, type, sum(amount) FROM payments WHERE user_id = ? GROUP BY ?, ?, ? ORDER BY id DESC", (session["user_id"], filter1, filter2, filter3,))
-        payments_all = db_cursor.fetchall()
+            db_cursor.execute("SELECT SUM(amount), " +filter1+" FROM payments WHERE user_id = ? GROUP BY "+filter1+" ORDER BY SUM(amount) DESC", (session["user_id"],))
+            payments_all = db_cursor.fetchall()
+            filter1 = filter1.capitalize()
+            return render_template('analyse1.html', payments_all = payments_all, filter1 = filter1)
 
-        return render_template('analyse.html', payments_all = payments_all)
+        elif (filter1 == filter2) and (filter1 != filter3):
+            db_cursor.execute("SELECT sum(amount), " +filter1+", " +filter3+" FROM payments WHERE user_id = ? GROUP BY" +filter1+", " +filter3+" ORDER BY SUM(amount) DESC", (session["user_id"],))
+            payments_all = db_cursor.fetchall()
+            filter1 = filter1.capitalize()
+            filter3 = filter3.capitalize()
+            return render_template('analyse2.html', payments_all = payments_all, filter1 = filter1, filter3 = filter3)
+
+        elif (filter1 == filter3) and (filter1 != filter2):
+            db_cursor.execute("SELECT sum(amount), " +filter1+", " +filter2+" FROM payments WHERE user_id = ? GROUP BY" +filter1+", " +filter2+" ORDER BY SUM(amount) DESC", (session["user_id"],))
+            payments_all = db_cursor.fetchall()
+            filter1 = filter1.capitalize()
+            filter2 = filter2.capitalize()
+            return render_template('analyse3.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2)
+
+        else:
+            db_cursor.execute("SELECT SUM(amount), "+filter1+", "+filter2+", "+filter3+" FROM payments WHERE user_id = ? GROUP BY "+filter1+", "+filter2+", "+filter3+" ORDER BY SUM(amount) DESC", (session["user_id"],))
+            payments_all = db_cursor.fetchall()
+            filter1 = filter1.capitalize()
+            filter2 = filter2.capitalize()
+            filter3 = filter3.capitalize()
+            return render_template('analyse4.html', payments_all = payments_all, filter1 = filter1, filter2 = filter2, filter3 = filter3)
 
 
 @app.route('/home')
@@ -99,17 +132,31 @@ def home():
     db_cursor = db.cursor()
     
     try:
-        db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+        db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY year, month", (session["user_id"],))
         all_queries_plan = db_cursor.fetchall()
     except:
         return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
 
     #collect all the data from payments made
     try:
-        db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+        db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY year, month", (session["user_id"],))
         payments = db_cursor.fetchall()
     except:
         return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
+
+    if len(all_queries_plan) > len(payments):
+        for i in range(len(all_queries_plan)):
+            try:
+                payments[i] + 1
+            except:
+                payments.append([0])
+        
+    elif len(payments) > len(all_queries_plan):
+        for i in range(len(payments)):
+            try:
+                all_queries_plan[i][0] + 1
+            except:
+                all_queries_plan.append([0,0, 0, 0, 0, 0])
 
     return render_template('home.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
 
@@ -127,7 +174,7 @@ def insert():
         db_cursor = db.cursor()
 
         #display the previous queries in table form to show the users current picture
-        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY id DESC", (session["user_id"],))
+        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
 
         all_queries = db_cursor.fetchall()
 
@@ -177,7 +224,7 @@ def insert():
         db.commit()
 
         #display the previous queries in table form to show the users current picture
-        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY id DESC", (session["user_id"],))
+        db_cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY year DESC, month DESC, day DESC", (session["user_id"],))
 
         all_queries = db_cursor.fetchall()
 
@@ -231,23 +278,37 @@ def login():
         
         #set user to email
         db_cursor.execute("SELECT id FROM users WHERE email =?", (email,))
-        id = db_cursor.fetchall()
+        id = db_cursor.fetchone()
         session["user_email"] = email
-        session["user_id"] = id[0][0]
+        session["user_id"] = id[0]
 
         #collect all the data for the plan
         try:
-            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY year, month", (session["user_id"],))
             all_queries_plan = db_cursor.fetchall()
         except:
-            return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
+            all_queries_plan = [[0,0, 0, 0, 0, 0]]
 
         #collect all the data from payments made
         try:
-            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY year, month", (session["user_id"],))
             payments = db_cursor.fetchall()
         except:
-            return render_template('home.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
+            payments = [[0]]
+
+        if len(all_queries_plan) > len(payments):
+            for i in range(len(all_queries_plan)):
+                try:
+                    payments[i] + 1
+                except:
+                    payments.append([0])
+        
+        elif len(payments) > len(all_queries_plan):
+            for i in range(len(payments)):
+                try:
+                    all_queries_plan[i][0] + 1
+                except:
+                    all_queries_plan.append([0,0, 0, 0, 0, 0])
 
         return render_template('home.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
 
@@ -272,19 +333,34 @@ def plan():
 
         #collect all the data for the plan
         try:
-            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY year, month", (session["user_id"],))
             all_queries_plan = db_cursor.fetchall()
         except:
             return render_template('plan.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
 
         #collect all the data from payments made
         try:
-            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY year, month", (session["user_id"],))
             payments = db_cursor.fetchall()
         except:
             return render_template('plan.html', all_queries_plan = [[0,0, 0, 0, 0, 0]], payments = [[0]], email = session["user_email"])
 
+        if len(all_queries_plan) > len(payments):
+            for i in range(len(all_queries_plan)):
+                try:
+                    payments[i] + 1
+                except:
+                    payments.append([0])
+        
+        elif len(payments) > len(all_queries_plan):
+            for i in range(len(payments)):
+                try:
+                    all_queries_plan[i][0] + 1
+                except:
+                    all_queries_plan.append([0,0, 0, 0, 0, 0])
+
         return render_template('plan.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
+
 
     else:
         db = sqlite3.connect('expenses.db')
@@ -292,20 +368,37 @@ def plan():
 
         #create the variables with the data from the form
         month = request.form.get("month")
+        prevMonth = int(month) -1
         year = request.form.get("year")
+        prevYear = int(year) - 1
         salary = request.form.get("salary")
-        if salary == None:
-            db_cursor.execute("SELECT monthly_salary FROM planning WHERE month = ? AND year = ?", (month-1, year,))
+        if not salary and prevMonth != 0:
+            db_cursor.execute("SELECT monthly_salary FROM planning WHERE month = ? AND year = ?", (str(prevMonth), year,))
             salary = db_cursor.fetchall()
+            salary = salary[0][0]
+        elif not salary and prevMonth == 0:
+            db_cursor.execute("SELECT monthly_salary FROM planning WHERE month = ? AND year = ?", (str(12), str(prevYear),))
+            salary = db_cursor.fetchall()
+            salary = salary[0][0]
+
+        salary = float(salary)
+
 
         saving = request.form.get("saving")
-        if saving == None:
-            db_cursor.execute("SELECT monthly_saving FROM planning WHERE month = ? AND year = ?", (month-1, year,))
-            salary = db_cursor.fetchall()
+        if not saving and prevMonth != 0:
+            db_cursor.execute("SELECT monthly_saving FROM planning WHERE month = ? AND year = ?", (str(prevMonth), year,))
+            saving = db_cursor.fetchall()
+            saving = saving[0][0]
+        elif not saving and prevMonth == 0:
+            db_cursor.execute("SELECT monthly_saving FROM planning WHERE month = ? AND year = ?", (str(12), str(prevYear),))
+            saving = db_cursor.fetchall()
+            saving = saving[0][0]
+
+        saving = float(saving)
 
         #collect all the data for the plan
         try:
-            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY year, month", (session["user_id"],))
             all_queries_plan = db_cursor.fetchall()
         except:
             all_queries_plan = [[0,0, 0, 0, 0, 0]]
@@ -313,10 +406,10 @@ def plan():
 
         #collect all the data from payments made
         try:
-            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ?, GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+            db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ?, GROUP BY month, year ORDER BY year, month", (session["user_id"],))
             payments = db_cursor.fetchall()
         except:
-            payments = [0]      
+            payments = [[0]]      
 
         #run checks:
         if not month:
@@ -341,17 +434,31 @@ def plan():
                 redirect('/plan')            
 
         #insert the variables into the database
-        db_cursor.execute("INSERT INTO planning (month, year, monthly_salary, monthly_saving, user_id) VALUES (?, ?, ?, ?, ?)", (month, year, float(salary), float(saving), session["user_id"],))
+        db_cursor.execute("INSERT INTO planning (month, year, monthly_salary, monthly_saving, user_id) VALUES (?, ?, ?, ?, ?)", (month, year, salary, saving, session["user_id"],))
         db.commit()
 
         #collect all the data for the plan
-        db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY month, year DESC", (session["user_id"],))
+        db_cursor.execute("SELECT * FROM planning WHERE user_id = ? ORDER BY year, month", (session["user_id"],))
 
         all_queries_plan = db_cursor.fetchall()
 
         #collect all the data from payments made
-        db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY month, year DESC", (session["user_id"],))
+        db_cursor.execute("SELECT SUM(amount) FROM payments WHERE user_id = ? GROUP BY month, year ORDER BY year, month", (session["user_id"],))
         payments = db_cursor.fetchall()
+
+        if len(all_queries_plan) > len(payments):
+            for i in range(len(all_queries_plan)):
+                try:
+                    payments[i] + 1
+                except:
+                    payments.append([0])
+        
+        elif len(payments) > len(all_queries_plan):
+            for i in range(len(payments)):
+                try:
+                    all_queries_plan[i][0] + 1
+                except:
+                    all_queries_plan.append([0,0, 0, 0, 0, 0])
 
         return render_template('plan.html', all_queries_plan = all_queries_plan, payments = payments, email = session["user_email"])
 
@@ -389,6 +496,7 @@ def register():
         #prepare for registration:
         hash_pw = generate_password_hash(request.form.get("password"))
         email = request.form.get("email")
+        email.lower()
 
         #insert into database
         db_cursor.execute("INSERT INTO users (email, password_hash) VALUES (?, ?)", (email, hash_pw,))

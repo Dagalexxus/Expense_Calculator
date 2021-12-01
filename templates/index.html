@@ -11,11 +11,50 @@
         <h2>An easy way to keep track of your expenses</h2>
     </div>  
 </div>
-        
-    <h4> Already an user?</h4>
-    <a href="{{ url_for('login') }}">Login here.</a>
 
-    <h4> New user?</h4>
-    <a href="{{ url_for('register') }}">Register here.</a>
+<div class = "row g-2 align-items-center" style = "padding-top: 20px; padding-bottom: 20px;">
+    <div class = "col-4">
 
+    </div>
+    <div class = "col-2">
+        <h4> Already an user?</h4>
+        <a href="{{ url_for('login') }}">Login here.</a>
+    </div>
+
+    <div class = "col-2" style = "text-align: end;">
+        <h4> New user?</h4>
+        <a href="{{ url_for('register') }}">Register here.</a>
+    </div>
+
+    <div class = "col-4">
+
+    </div>
+</div>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="..." class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="..." class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="..." class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
 {% endblock %}
